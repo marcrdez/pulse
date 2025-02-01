@@ -6,6 +6,7 @@ import { IpcRenderer, ipcRenderer } from 'electron/renderer';
 const api = {
   onWillNavigate: (callback): IpcRenderer =>
     ipcRenderer.on('will-navigate', (_event, value) => callback(value)),
+  setUrl: (url: string): void => ipcRenderer.send('set-url', url),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

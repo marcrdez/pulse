@@ -1,9 +1,9 @@
-import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem } from 'electron';
+import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
 
 const SIDEBAR_WIDTH = 180;
-const MENUBAR_HEIGHT = 30;
+const MENUBAR_HEIGHT = 40;
 const CONTENT_PADDING = 7;
 
 function createWindow(): void {
@@ -80,7 +80,20 @@ function createWindow(): void {
     sideBar.webContents.send('will-navigate', url);
   });
 
-  contentView.webContents.loadURL('https://www.google.com');
+  ipcMain.on('set-url', (_, url: string) => {
+    function formatUrl(input: string): string {
+      if (/^(https?:\/\/)/i.test(input)) {
+        return input;
+      }
+
+      if (/^[\w.-]+\.[a-zA-Z]{2,}$/.test(input)) {
+        return `https://${input}`;
+      }
+
+      return `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+    }
+    contentView.webContents.loadURL(formatUrl(url));
+  });
 
   createMenu(sideBar);
 }
