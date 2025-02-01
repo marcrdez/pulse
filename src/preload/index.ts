@@ -1,8 +1,12 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { IpcRenderer, ipcRenderer } from 'electron/renderer'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  onWillNavigate: (callback): IpcRenderer =>
+    ipcRenderer.on('will-navigate', (_event, value) => callback(value))
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

@@ -1,38 +1,115 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import { electronApp, is } from '@electron-toolkit/utils'
+
+const SIDEBAR_WIDTH = 180
+const MENUBAR_HEIGHT = 20
+const CONTENT_PADDING = 7
 
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const mainWindow = new BaseWindow({
     width: 900,
-    height: 670,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
+    height: 600,
+    title: 'Pulse',
+    titleBarStyle: 'hidden',
+    ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
   })
+  const bounds = mainWindow.getBounds()
 
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+  const sideBar = new WebContentsView({
+    webPreferences: { preload: join(__dirname, '../preload/index.js'), sandbox: false }
   })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  mainWindow.contentView.addChildView(sideBar)
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    sideBar.webContents.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    sideBar.webContents.loadFile(join(__dirname, '../renderer/index.html'))
   }
+  sideBar.setBounds({ x: 0, y: 0, width: bounds.width, height: bounds.height })
+
+  const contentView = new WebContentsView({
+    webPreferences: { preload: join(__dirname, '../preload/index.js'), sandbox: false }
+  })
+  contentView.setBorderRadius(10)
+  mainWindow.contentView.addChildView(contentView)
+  contentView.webContents.loadURL('https://www.google.com')
+
+  const CONTENT_WIDTH = bounds.width - SIDEBAR_WIDTH - CONTENT_PADDING
+  const CONTENT_HEIGHT = bounds.height - MENUBAR_HEIGHT - CONTENT_PADDING
+
+  contentView.setBounds({
+    x: SIDEBAR_WIDTH,
+    y: MENUBAR_HEIGHT,
+    width: CONTENT_WIDTH,
+    height: CONTENT_HEIGHT
+  })
+
+  mainWindow.on('resize', () => {
+    if (!mainWindow || !contentView) {
+      return
+    }
+
+    const updatedBounds = mainWindow.getBounds()
+    const UPDATED_CONTENT_WIDTH = updatedBounds.width - SIDEBAR_WIDTH - CONTENT_PADDING
+    const UPDATED_CONTENT_HEIGHT = updatedBounds.height - MENUBAR_HEIGHT - CONTENT_PADDING
+
+    contentView.setBounds({
+      x: SIDEBAR_WIDTH,
+      y: MENUBAR_HEIGHT,
+      width: UPDATED_CONTENT_WIDTH,
+      height: UPDATED_CONTENT_HEIGHT
+    })
+    sideBar.setBounds({
+      x: 0,
+      y: 0,
+      width: updatedBounds.width,
+      height: updatedBounds.height
+    })
+  })
+
+  contentView.webContents.on('will-navigate', (ev) => {
+    sideBar.webContents.send('will-navigate', ev.url)
+  })
+
+  contentView.webContents.on('did-navigate-in-page', (ev, url, isMainFrame) => {
+    if (!isMainFrame) {
+      return
+    }
+
+    sideBar.webContents.send('will-navigate', url)
+  })
+
+  createMenu(sideBar)
+}
+
+function createMenu(view: WebContentsView): void {
+  const { webContents } = view
+
+  const menu = new Menu()
+
+  menu.append(
+    new MenuItem({
+      label: 'Open developer tools',
+      submenu: [
+        {
+          label: 'Toggle developer tools',
+          role: 'toggleDevTools',
+          accelerator: process.platform === 'darwin' ? 'F12' : 'F12',
+          click: (): void => {
+            if (webContents.isDevToolsOpened()) {
+              webContents.closeDevTools()
+            } else {
+              webContents.openDevTools({ mode: 'undocked' })
+              console.log('Open dev tool...')
+            }
+          }
+        }
+      ]
+    })
+  )
+
+  Menu.setApplicationMenu(menu)
 }
 
 // This method will be called when Electron has finished
@@ -45,13 +122,6 @@ app.whenReady().then(() => {
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
-
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
-
   createWindow()
 
   app.on('activate', function () {
