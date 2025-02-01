@@ -12,15 +12,28 @@
 
 <style>
   .url-bar {
+    width: 50%;
+    height: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
+    app-region: no-drag;
   }
 
   input {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: white;
+    height: 20px;
+    text-align: center;
     flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    row-gap: 8px;
+    border-radius: 7px;
+    border: none;
+    border-width: 0;
+    box-shadow: none;
+  }
+
+  input:focus {
+    outline: none;
   }
 </style>
