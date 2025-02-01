@@ -1,9 +1,9 @@
 <script lang="ts">
-  let url = ''
+  let url = '';
 
   window.api.onWillNavigate((value) => {
-    url = value
-  })
+    url = value;
+  });
 </script>
 
 <div class="url-bar">
