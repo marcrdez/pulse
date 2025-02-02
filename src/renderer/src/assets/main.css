@@ -31,7 +31,9 @@ code {
 
 #sidebar {
   margin-top: 40px;
-  width: 160px;
+  width: 200px;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 
 #topbar {
@@ -58,7 +60,6 @@ code {
   font-weight: 700;
   line-height: 32px;
   text-align: center;
-  margin: 0 10px;
   padding: 16px 0;
 }
 
@@ -151,6 +152,10 @@ code {
 .tab {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 3px;
 }
 
 .tab:hover {
@@ -158,7 +163,11 @@ code {
 }
 
 .tab p {
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tab img {

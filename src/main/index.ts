@@ -3,7 +3,7 @@ import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
 import { Browser } from './browser';
 
-export const SIDEBAR_WIDTH = 180;
+export const SIDEBAR_WIDTH = 200;
 export const MENUBAR_HEIGHT = 40;
 export const CONTENT_PADDING = 4;
 
