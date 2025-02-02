@@ -31,8 +31,6 @@ code {
 
 #sidebar {
   margin-top: 40px;
-  padding-left: 5px;
-  padding-right: 5px;
   width: 160px;
 }
 
@@ -148,6 +146,24 @@ code {
   &:last-child {
     border: none;
   }
+}
+
+.tab {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+.tab:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tab p {
+  font-size: 16px;
+}
+
+.tab img {
+  height: 16px;
+  width: 16px;
 }
 
 @media (max-width: 720px) {

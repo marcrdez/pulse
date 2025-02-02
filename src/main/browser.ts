@@ -62,6 +62,7 @@ export class Browser extends EventEmitter {
       id: tab.id,
       title: tab.title,
       url: tab.url,
+      faviconUrls: tab.faviconUrls,
     }));
   }
 }

@@ -13,7 +13,6 @@
 </div>
 <div id="sidebar" class="text">
   {#each tabs as tab}
-    {console.info(tab.title)}
-    <Tab name={tab.title} />
+    <Tab name={tab.title} faviconUrls={tab.faviconUrls} />
   {/each}
 </div>

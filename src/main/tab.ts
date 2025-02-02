@@ -5,6 +5,7 @@ import EventEmitter from 'events';
 
 export class Tab extends EventEmitter {
   id: string;
+  faviconUrls: string[];
   title: string;
   url: string;
   contentView: WebContentsView;
@@ -18,9 +19,13 @@ export class Tab extends EventEmitter {
 
     this.title = this.contentView.webContents.getTitle();
     this.url = this.contentView.webContents.getURL();
+    this.faviconUrls = [];
 
     const contentView = new WebContentsView({
-      webPreferences: { preload: join(__dirname, '../preload/index.js'), sandbox: false },
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        sandbox: false,
+      },
     });
     contentView.setBorderRadius(10);
     mainWindow.contentView.addChildView(contentView);
@@ -61,6 +66,11 @@ export class Tab extends EventEmitter {
 
     contentView.webContents.on('page-title-updated', (_, title) => {
       this.title = title;
+      this.emit('tab-changed', this);
+    });
+
+    contentView.webContents.on('page-favicon-updated', (_, favicons) => {
+      this.faviconUrls = favicons;
       this.emit('tab-changed', this);
     });
 

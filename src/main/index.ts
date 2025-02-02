@@ -1,7 +1,6 @@
 import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
-import { Tab } from './tab';
 import { Browser } from './browser';
 
 export const SIDEBAR_WIDTH = 180;
@@ -21,7 +20,10 @@ function createWindow(): void {
   const bounds = mainWindow.getBounds();
 
   const sideBar = new WebContentsView({
-    webPreferences: { preload: join(__dirname, '../preload/index.js'), sandbox: false },
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js'),
+      sandbox: false,
+    },
   });
   mainWindow.contentView.addChildView(sideBar);
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -46,7 +48,7 @@ function createWindow(): void {
     });
   });
 
-  const browser = new Browser(mainWindow, sideBar);
+  new Browser(mainWindow, sideBar);
 
   createMenu(sideBar);
 }
@@ -56,16 +58,31 @@ function createMenu(sideBar: WebContentsView): void {
 
   menu.append(
     new MenuItem({
-      label: 'Open developer tools',
+      label: app.name,
       submenu: [
         {
           label: 'Toggle developer tools',
           role: 'toggleDevTools',
           accelerator: process.platform === 'darwin' ? 'F12' : 'F12',
           click: (): void => {
-            sideBar.webContents.openDevTools();
+            sideBar.webContents.openDevTools({ mode: 'undocked' });
           },
         },
+      ],
+    }),
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'Edit',
+      submenu: [
+        { label: 'Undo', accelerator: 'CmdOrCtrl+Z', role: 'undo' },
+        { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo' },
+        { type: 'separator' },
+        { label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' },
+        { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
+        { label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
+        { label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
       ],
     }),
   );
