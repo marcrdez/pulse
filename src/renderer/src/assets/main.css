@@ -3,7 +3,7 @@
 body {
   display: flex;
   overflow: hidden;
-  background-image: url('./gradient.svg');
+  background-image: url('./bourdeus-gradient.svg');
   background-size: cover;
   user-select: none;
 }

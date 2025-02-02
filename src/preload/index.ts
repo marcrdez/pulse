@@ -1,12 +1,15 @@
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { IpcRenderer, ipcRenderer } from 'electron/renderer';
+import { Tab } from '../main/tab';
 
 // Custom APIs for renderer
 const api = {
   onWillNavigate: (callback): IpcRenderer =>
     ipcRenderer.on('will-navigate', (_event, value) => callback(value)),
   setUrl: (url: string): void => ipcRenderer.send('set-url', url),
+  onTabsChanged: (callback): IpcRenderer =>
+    ipcRenderer.on('tabs-changed', (_event, tabs: Array<Tab>) => callback(tabs)),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

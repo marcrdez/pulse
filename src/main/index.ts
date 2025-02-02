@@ -1,10 +1,12 @@
 import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
+import { Tab } from './tab';
+import { Browser } from './browser';
 
-const SIDEBAR_WIDTH = 180;
-const MENUBAR_HEIGHT = 40;
-const CONTENT_PADDING = 7;
+export const SIDEBAR_WIDTH = 180;
+export const MENUBAR_HEIGHT = 40;
+export const CONTENT_PADDING = 4;
 
 function createWindow(): void {
   // Create the browser window.
@@ -29,37 +31,13 @@ function createWindow(): void {
   }
   sideBar.setBounds({ x: 0, y: 0, width: bounds.width, height: bounds.height });
 
-  const contentView = new WebContentsView({
-    webPreferences: { preload: join(__dirname, '../preload/index.js'), sandbox: false },
-  });
-  contentView.setBorderRadius(10);
-  mainWindow.contentView.addChildView(contentView);
-
-  const CONTENT_WIDTH = bounds.width - SIDEBAR_WIDTH - CONTENT_PADDING;
-  const CONTENT_HEIGHT = bounds.height - MENUBAR_HEIGHT - CONTENT_PADDING;
-
-  contentView.setBounds({
-    x: SIDEBAR_WIDTH,
-    y: MENUBAR_HEIGHT,
-    width: CONTENT_WIDTH,
-    height: CONTENT_HEIGHT,
-  });
-
   mainWindow.on('resize', () => {
-    if (!mainWindow || !contentView) {
+    if (!mainWindow) {
       return;
     }
 
     const updatedBounds = mainWindow.getBounds();
-    const UPDATED_CONTENT_WIDTH = updatedBounds.width - SIDEBAR_WIDTH - CONTENT_PADDING;
-    const UPDATED_CONTENT_HEIGHT = updatedBounds.height - MENUBAR_HEIGHT - CONTENT_PADDING;
 
-    contentView.setBounds({
-      x: SIDEBAR_WIDTH,
-      y: MENUBAR_HEIGHT,
-      width: UPDATED_CONTENT_WIDTH,
-      height: UPDATED_CONTENT_HEIGHT,
-    });
     sideBar.setBounds({
       x: 0,
       y: 0,
@@ -68,39 +46,12 @@ function createWindow(): void {
     });
   });
 
-  contentView.webContents.on('will-navigate', (ev) => {
-    sideBar.webContents.send('will-navigate', ev.url);
-  });
-
-  contentView.webContents.on('did-navigate-in-page', (_, url, isMainFrame) => {
-    if (!isMainFrame) {
-      return;
-    }
-
-    sideBar.webContents.send('will-navigate', url);
-  });
-
-  ipcMain.on('set-url', (_, url: string) => {
-    function formatUrl(input: string): string {
-      if (/^(https?:\/\/)/i.test(input)) {
-        return input;
-      }
-
-      if (/^[\w.-]+\.[a-zA-Z]{2,}$/.test(input)) {
-        return `https://${input}`;
-      }
-
-      return `https://www.google.com/search?q=${encodeURIComponent(input)}`;
-    }
-    contentView.webContents.loadURL(formatUrl(url));
-  });
+  const browser = new Browser(mainWindow, sideBar);
 
   createMenu(sideBar);
 }
 
-function createMenu(view: WebContentsView): void {
-  const { webContents } = view;
-
+function createMenu(sideBar: WebContentsView): void {
   const menu = new Menu();
 
   menu.append(
@@ -112,12 +63,7 @@ function createMenu(view: WebContentsView): void {
           role: 'toggleDevTools',
           accelerator: process.platform === 'darwin' ? 'F12' : 'F12',
           click: (): void => {
-            if (webContents.isDevToolsOpened()) {
-              webContents.closeDevTools();
-            } else {
-              webContents.openDevTools({ mode: 'undocked' });
-              console.log('Open dev tool...');
-            }
+            sideBar.webContents.openDevTools();
           },
         },
       ],
