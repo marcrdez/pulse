@@ -41,8 +41,14 @@ export class Browser extends EventEmitter {
     this.sideBarView.webContents.send('tabs-changed', this.tabs);
   }
 
-  public deleteTab(id: string): void {
-    this._tabs = this._tabs.filter((tab) => tab.id !== id);
+  public deleteTab(tab: Tab): void {
+    this._tabs = this._tabs.filter((t) => t.id !== tab.id);
+    this.sideBarView.webContents.send('tabs-changed', this.tabs);
+  }
+
+  public updateCurrentTab(tab: Tab): void {
+    this._currentTab = tab;
+    this._currentTab.active();
     this.sideBarView.webContents.send('tabs-changed', this.tabs);
   }
 
@@ -73,7 +79,18 @@ export class Browser extends EventEmitter {
     });
 
     tabToRegister.on('tab-removed', (tab: Tab) => {
-      this.deleteTab(tab.id);
+      this.deleteTab(tab);
+      const nextTab = this._tabs.find(
+        (t) =>
+          t.contentView.webContents.id + 1 ===
+          (this.window.contentView.children.at(-1) as WebContentsView).webContents.id,
+      );
+
+      if (nextTab === undefined) {
+        return;
+      }
+
+      this.updateCurrentTab(nextTab);
     });
   }
 }
