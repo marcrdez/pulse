@@ -24,10 +24,7 @@ export class Browser extends EventEmitter {
     this._currentTab = new Tab(this.window, this.sideBarView);
     this._tabs.push(this._currentTab);
 
-    this._currentTab.on('tab-changed', (tab: Tab) => {
-      this._tabs = this._tabs.map((t) => (t.id === tab.id ? tab : t));
-      this.sideBarView.webContents.send('tabs-changed', this.tabs);
-    });
+    this.registerTabEvents(this._currentTab);
 
     ipcMain.on('new-tab', () => {
       this.addTab();
@@ -39,10 +36,7 @@ export class Browser extends EventEmitter {
 
     const tab = new Tab(this.window, this.sideBarView);
     this._currentTab = tab;
-    this._currentTab.on('tab-changed', (tab: Tab) => {
-      this._tabs = this._tabs.map((t) => (t.id === tab.id ? tab : t));
-      this.sideBarView.webContents.send('tabs-changed', this.tabs);
-    });
+    this.registerTabEvents(tab);
     this._tabs.push(tab);
     this.sideBarView.webContents.send('tabs-changed', this.tabs);
   }
@@ -70,5 +64,16 @@ export class Browser extends EventEmitter {
       faviconUrls: tab.faviconUrls,
       isActive: tab.isActive,
     }));
+  }
+
+  private registerTabEvents(tabToRegister: Tab): void {
+    tabToRegister.on('tab-changed', (tab: Tab) => {
+      this._tabs = this._tabs.map((t) => (t.id === tab.id ? tab : t));
+      this.sideBarView.webContents.send('tabs-changed', this.tabs);
+    });
+
+    tabToRegister.on('tab-removed', (tab: Tab) => {
+      this.deleteTab(tab.id);
+    });
   }
 }

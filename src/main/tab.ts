@@ -45,22 +45,7 @@ export class Tab extends EventEmitter {
       height: CONTENT_HEIGHT,
     });
 
-    mainWindow.on('resize', () => {
-      if (!mainWindow || !contentView) {
-        return;
-      }
-
-      const updatedBounds = mainWindow.getBounds();
-      const UPDATED_CONTENT_WIDTH = updatedBounds.width - SIDEBAR_WIDTH - CONTENT_PADDING;
-      const UPDATED_CONTENT_HEIGHT = updatedBounds.height - MENUBAR_HEIGHT - CONTENT_PADDING;
-
-      contentView.setBounds({
-        x: SIDEBAR_WIDTH,
-        y: MENUBAR_HEIGHT,
-        width: UPDATED_CONTENT_WIDTH,
-        height: UPDATED_CONTENT_HEIGHT,
-      });
-    });
+    this.registerAutoResize(mainWindow, contentView);
 
     contentView.webContents.on('will-navigate', (event) => {
       sideBarView.webContents.send('will-navigate', event.url);
@@ -106,6 +91,16 @@ export class Tab extends EventEmitter {
         return `https://www.google.com/search?q=${encodeURIComponent(input)}`;
       }
       contentView.webContents.loadURL(formatUrl(url));
+      this.emit('tab-changed', this);
+    });
+
+    ipcMain.on('close-tab', (_, tabId: string) => {
+      if (this.id !== tabId) {
+        return;
+      }
+
+      mainWindow.contentView.removeChildView(contentView);
+      this.emit('tab-removed', this);
     });
   }
 
@@ -115,5 +110,24 @@ export class Tab extends EventEmitter {
 
   public background(): void {
     this.isActive = false;
+  }
+
+  private registerAutoResize(mainWindow: BaseWindow, contentView: WebContentsView): void {
+    mainWindow.on('resize', () => {
+      if (!mainWindow || !contentView) {
+        return;
+      }
+
+      const updatedBounds = mainWindow.getBounds();
+      const UPDATED_CONTENT_WIDTH = updatedBounds.width - SIDEBAR_WIDTH - CONTENT_PADDING;
+      const UPDATED_CONTENT_HEIGHT = updatedBounds.height - MENUBAR_HEIGHT - CONTENT_PADDING;
+
+      contentView.setBounds({
+        x: SIDEBAR_WIDTH,
+        y: MENUBAR_HEIGHT,
+        width: UPDATED_CONTENT_WIDTH,
+        height: UPDATED_CONTENT_HEIGHT,
+      });
+    });
   }
 }

@@ -15,6 +15,6 @@
 <div id="sidebar" class="text">
   <NewTab />
   {#each tabs as tab}
-    <Tab name={tab.title} faviconUrls={tab.faviconUrls} isActive={tab.isActive} />
+    <Tab id={tab.id} name={tab.title} faviconUrls={tab.faviconUrls} isActive={tab.isActive} />
   {/each}
 </div>

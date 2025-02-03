@@ -11,8 +11,16 @@ Speedness and to learn it.
 ## Bugs
 
 - [ ] Sometimes when the browser is not focused, URL and Tab dissapear.
+- [ ] When entering an URL it does not change the URL when loading the webpage.
+- [ ] When closing a tab, the previous tab does not become active.
 
 ## Feats
 
-- [ ] Add new tabs.
-- [ ] Close tabs.
+- [ ] Change between tabs.
+- [ ] Add error offline HTML page.
+- [ ] Add loading animation to tab when loading a page.
+
+### Milestones
+
+- [x] Add new tabs.
+- [x] Close tabs.

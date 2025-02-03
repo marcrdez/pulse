@@ -1,9 +1,13 @@
 <script lang="ts">
   import { IconX } from '@tabler/icons-svelte';
 
-  let { name, faviconUrls, isActive } = $props();
+  let { id, name, faviconUrls, isActive } = $props();
 
   let isMouseOver = $state(false);
+
+  const handleCloseClick = (): void => {
+    window.api.closeTab(id);
+  };
 </script>
 
 <div
@@ -21,7 +25,14 @@
     onload={(event): string => ((event.target as HTMLImageElement).style.display = '')}
   />
   <p>{name}</p>
-  <div class="hidden" class:close-icon-div={isMouseOver}>
+  <div
+    class="hidden"
+    class:close-icon-div={isMouseOver}
+    onclick={handleCloseClick}
+    onkeyup={(): void => {}}
+    role="button"
+    tabindex="0"
+  >
     <IconX size={20} class="close-icon" />
   </div>
 </div>

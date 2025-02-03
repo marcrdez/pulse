@@ -7,10 +7,11 @@ import { Tab } from '../main/tab';
 const api = {
   onWillNavigate: (callback): IpcRenderer =>
     ipcRenderer.on('will-navigate', (_event, value) => callback(value)),
-  setUrl: (url: string): void => ipcRenderer.send('set-url', url),
   onTabsChanged: (callback): IpcRenderer =>
     ipcRenderer.on('tabs-changed', (_event, tabs: Array<Tab>) => callback(tabs)),
+  setUrl: (url: string): void => ipcRenderer.send('set-url', url),
   newTab: (): void => ipcRenderer.send('new-tab'),
+  closeTab: (id: string): void => ipcRenderer.send('close-tab', id),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
