@@ -34,6 +34,9 @@ code {
   width: 200px;
   padding-left: 7px;
   padding-right: 7px;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 #topbar {
@@ -150,12 +153,22 @@ code {
 }
 
 .tab {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0);
   border-radius: 5px;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding-left: 3px;
+  padding-left: 6px;
+  padding-right: 3px;
+  min-width: 180px;
+  min-height: 30px;
+  max-width: 180px;
+  max-height: 30px;
+  transition: background-color 0.2s;
+}
+
+.active {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .tab:hover {
@@ -171,8 +184,28 @@ code {
 }
 
 .tab img {
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
+}
+
+.hidden {
+  display: none;
+}
+
+.close-icon-div {
+  display: flex;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  min-height: 20px;
+  min-width: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.close-icon-div:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.close-icon {
 }
 
 @media (max-width: 720px) {

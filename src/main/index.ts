@@ -1,4 +1,4 @@
-import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem, ipcMain } from 'electron';
+import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem } from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
 import { Browser } from './browser';

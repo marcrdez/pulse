@@ -27,6 +27,7 @@
   }
 
   input {
+    padding: 0 10px;
     background-color: rgba(255, 255, 255, 0.25);
     color: white;
     height: 25px;
@@ -37,6 +38,9 @@
     border: none;
     border-width: 0;
     font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   input:focus {

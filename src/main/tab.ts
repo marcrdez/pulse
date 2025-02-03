@@ -9,6 +9,7 @@ export class Tab extends EventEmitter {
   title: string;
   url: string;
   contentView: WebContentsView;
+  isActive: boolean;
 
   constructor(mainWindow: BaseWindow, sideBarView: WebContentsView) {
     super();
@@ -20,6 +21,7 @@ export class Tab extends EventEmitter {
     this.title = this.contentView.webContents.getTitle();
     this.url = this.contentView.webContents.getURL();
     this.faviconUrls = [];
+    this.isActive = true;
 
     const contentView = new WebContentsView({
       webPreferences: {
@@ -27,6 +29,7 @@ export class Tab extends EventEmitter {
         sandbox: false,
       },
     });
+    contentView.webContents.loadURL('https://www.google.com');
     contentView.setBorderRadius(10);
     mainWindow.contentView.addChildView(contentView);
 
@@ -87,6 +90,10 @@ export class Tab extends EventEmitter {
     });
 
     ipcMain.on('set-url', (_, url: string) => {
+      if (!this.isActive) {
+        return;
+      }
+
       function formatUrl(input: string): string {
         if (/^(https?:\/\/)/i.test(input)) {
           return input;
@@ -100,5 +107,13 @@ export class Tab extends EventEmitter {
       }
       contentView.webContents.loadURL(formatUrl(url));
     });
+  }
+
+  public active(): void {
+    this.isActive = true;
+  }
+
+  public background(): void {
+    this.isActive = false;
   }
 }

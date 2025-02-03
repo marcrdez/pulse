@@ -4,6 +4,7 @@ interface API {
   onWillNavigate: (callback) => IpcRenderer;
   setUrl(url: string): void;
   onTabsChanged: (callback) => IpcRenderer;
+  newTab(): void;
 }
 
 declare global {

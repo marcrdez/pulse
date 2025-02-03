@@ -10,6 +10,7 @@ const api = {
   setUrl: (url: string): void => ipcRenderer.send('set-url', url),
   onTabsChanged: (callback): IpcRenderer =>
     ipcRenderer.on('tabs-changed', (_event, tabs: Array<Tab>) => callback(tabs)),
+  newTab: (): void => ipcRenderer.send('new-tab'),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

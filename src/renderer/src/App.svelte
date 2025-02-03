@@ -1,4 +1,5 @@
 <script lang="ts">
+  import NewTab from './components/NewTab.svelte';
   import Tab from './components/Tab.svelte';
   import URLBar from './components/URLBar.svelte';
 
@@ -12,7 +13,8 @@
   <URLBar />
 </div>
 <div id="sidebar" class="text">
+  <NewTab />
   {#each tabs as tab}
-    <Tab name={tab.title} faviconUrls={tab.faviconUrls} />
+    <Tab name={tab.title} faviconUrls={tab.faviconUrls} isActive={tab.isActive} />
   {/each}
 </div>

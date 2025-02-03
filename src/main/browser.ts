@@ -1,6 +1,7 @@
 import { BaseWindow, WebContentsView } from 'electron';
 import { Tab } from './tab';
 import EventEmitter from 'events';
+import { ipcMain } from 'electron/main';
 
 export interface PrimitiveTabs {
   id: string;
@@ -24,17 +25,25 @@ export class Browser extends EventEmitter {
     this._tabs.push(this._currentTab);
 
     this._currentTab.on('tab-changed', (tab: Tab) => {
-      this._currentTab = tab;
       this._tabs = this._tabs.map((t) => (t.id === tab.id ? tab : t));
       this.sideBarView.webContents.send('tabs-changed', this.tabs);
+    });
+
+    ipcMain.on('new-tab', () => {
+      this.addTab();
     });
   }
 
   public addTab(): void {
+    this._currentTab.background();
+
     const tab = new Tab(this.window, this.sideBarView);
     this._currentTab = tab;
+    this._currentTab.on('tab-changed', (tab: Tab) => {
+      this._tabs = this._tabs.map((t) => (t.id === tab.id ? tab : t));
+      this.sideBarView.webContents.send('tabs-changed', this.tabs);
+    });
     this._tabs.push(tab);
-    console.info(this._tabs);
     this.sideBarView.webContents.send('tabs-changed', this.tabs);
   }
 
@@ -53,16 +62,13 @@ export class Browser extends EventEmitter {
     }
   }
 
-  get currentTab(): Tab {
-    return this._currentTab;
-  }
-
   get tabs(): Array<PrimitiveTabs> {
     return this._tabs.map((tab) => ({
       id: tab.id,
       title: tab.title,
       url: tab.url,
       faviconUrls: tab.faviconUrls,
+      isActive: tab.isActive,
     }));
   }
 }
