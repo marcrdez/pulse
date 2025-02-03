@@ -11,6 +11,7 @@ const api = {
     ipcRenderer.on('tabs-changed', (_event, tabs: Array<Tab>) => callback(tabs)),
   setUrl: (url: string): void => ipcRenderer.send('set-url', url),
   newTab: (): void => ipcRenderer.send('new-tab'),
+  changeCurrentTab: (id: string): void => ipcRenderer.send('change-current-tab', id),
   closeTab: (id: string): void => ipcRenderer.send('close-tab', id),
 };
 

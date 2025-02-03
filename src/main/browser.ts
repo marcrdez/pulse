@@ -29,6 +29,18 @@ export class Browser extends EventEmitter {
     ipcMain.on('new-tab', () => {
       this.addTab();
     });
+
+    ipcMain.on('change-current-tab', (_event, id: string) => {
+      const tab = this._tabs.find((t) => t.id === id);
+      if (tab === undefined) {
+        return;
+      }
+
+      tab.emit('active', tab);
+
+      this._currentTab.background();
+      this.updateCurrentTab(tab);
+    });
   }
 
   public addTab(): void {
@@ -70,6 +82,10 @@ export class Browser extends EventEmitter {
       faviconUrls: tab.faviconUrls,
       isActive: tab.isActive,
     }));
+  }
+
+  get currentTab(): Tab {
+    return this._currentTab;
   }
 
   private registerTabEvents(tabToRegister: Tab): void {

@@ -5,6 +5,7 @@ interface API {
   onTabsChanged: (callback) => IpcRenderer;
   setUrl(url: string): void;
   newTab(): void;
+  changeCurrentTab(id: string): void;
   closeTab(id: string): void;
 }
 

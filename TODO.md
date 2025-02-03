@@ -8,6 +8,14 @@ Mainly because how difficult is to fork Chromium/Firefox and do the things that 
 
 Speedness and to learn it.
 
+> What are the priorities about TODOs?
+
+1. Bugs
+2. Refactors
+3. Feats
+
+Why? Avoiding bugs is the main priority, next is the refactors to avoid the big ball of mud and lastly new features.
+
 ## Bugs
 
 - [ ] Sometimes when the browser is not focused, URL and Tab dissapear.
@@ -18,12 +26,14 @@ Speedness and to learn it.
 
 - [ ] Change between tabs.
 - [ ] Add error offline HTML page.
+- [ ] Add preferences page.
 - [ ] Add loading animation to tab when loading a page.
 
 ## Refactors
 
 - [ ] Create a main content View that has all tabs as children.
 - [ ] Check where all the events are listened to avoid useless calls (for example: close tab call every tab event).
+- [ ] Remove current tab as it is last children from content view.
 
 ### Milestones
 

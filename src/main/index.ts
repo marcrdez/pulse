@@ -1,4 +1,13 @@
-import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem } from 'electron';
+import {
+  app,
+  BaseWindow,
+  WebContentsView,
+  BrowserWindow,
+  Menu,
+  MenuItem,
+  ipcMain,
+  ipcRenderer,
+} from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
 import { Browser } from './browser';
@@ -48,12 +57,12 @@ function createWindow(): void {
     });
   });
 
-  new Browser(mainWindow, sideBar);
+  const browser = new Browser(mainWindow, sideBar);
 
-  createMenu(sideBar);
+  createMenu(sideBar, browser);
 }
 
-function createMenu(sideBar: WebContentsView): void {
+function createMenu(sideBar: WebContentsView, browser: Browser): void {
   const menu = new Menu();
 
   menu.append(
@@ -83,6 +92,21 @@ function createMenu(sideBar: WebContentsView): void {
         { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
         { label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
         { label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
+      ],
+    }),
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'Tabs',
+      submenu: [
+        { label: 'New Tab', accelerator: 'CmdOrCtrl+T', click: (): void => browser.addTab() },
+        { type: 'separator' },
+        {
+          label: 'Close Tab',
+          accelerator: 'CmdOrCtrl+W',
+          click: (): boolean => browser.currentTab.emit('close-tab', browser.currentTab.id),
+        },
       ],
     }),
   );

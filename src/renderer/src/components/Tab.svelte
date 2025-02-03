@@ -8,6 +8,12 @@
   const handleCloseClick = (): void => {
     window.api.closeTab(id);
   };
+
+  const handleTabClick = (): void => {
+    if (isActive) return;
+
+    window.api.changeCurrentTab(id);
+  };
 </script>
 
 <div
@@ -17,6 +23,8 @@
   onmouseleave={(): boolean => (isMouseOver = false)}
   role="button"
   tabindex="0"
+  onclick={handleTabClick}
+  onkeyup={(): void => {}}
 >
   <img
     srcset={faviconUrls.join(', ')}

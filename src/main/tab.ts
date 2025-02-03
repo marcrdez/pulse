@@ -102,6 +102,21 @@ export class Tab extends EventEmitter {
       mainWindow.contentView.removeChildView(contentView);
       this.emit('tab-removed', this);
     });
+
+    this.on('close-tab', (_, tabId: string) => {
+      if (this.id !== tabId) {
+        return;
+      }
+
+      mainWindow.contentView.removeChildView(contentView);
+      this.emit('tab-removed', this);
+    });
+
+    this.on('active', () => {
+      this.isActive = true;
+
+      mainWindow.contentView.addChildView(contentView);
+    });
   }
 
   public active(): void {
