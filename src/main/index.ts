@@ -1,13 +1,4 @@
-import {
-  app,
-  BaseWindow,
-  WebContentsView,
-  BrowserWindow,
-  Menu,
-  MenuItem,
-  ipcMain,
-  ipcRenderer,
-} from 'electron';
+import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem } from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
 import { Browser } from './browser';
@@ -74,7 +65,7 @@ function createMenu(sideBar: WebContentsView, browser: Browser): void {
           role: 'toggleDevTools',
           accelerator: process.platform === 'darwin' ? 'F12' : 'F12',
           click: (): void => {
-            sideBar.webContents.openDevTools({ mode: 'undocked' });
+            sideBar.webContents.toggleDevTools();
           },
         },
       ],

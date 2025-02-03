@@ -1,5 +1,5 @@
 <script lang="ts">
-  let url = '';
+  let { url } = $props();
 
   window.api.onWillNavigate((value) => {
     url = value;
@@ -14,7 +14,7 @@
 </script>
 
 <div class="url-bar">
-  <input type="url" bind:value={url} placeholder="" on:keydown={handleInput} />
+  <input type="url" bind:value={url} placeholder="" onkeydown={handleInput} />
 </div>
 
 <style>

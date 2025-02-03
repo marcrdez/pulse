@@ -19,8 +19,6 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 ## Bugs
 
 - [ ] Sometimes when the browser is not focused, URL and Tab dissapear.
-- [ ] When entering an URL it does not change the URL when loading the webpage.
-- [ ] When changing tabs, the URL does not change.
 
 ## Feats
 
@@ -33,11 +31,14 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 - [ ] Create a main content View that has all tabs as children.
 - [ ] Check where all the events are listened to avoid useless calls (for example: close tab call every tab event).
 - [ ] Remove current tab as it is last children from content view.
+- [ ] Remove main ipc change url event, as we are using the active tab.
 
 ### Milestones
 
 > Ordered by latest
 
+- [x] When entering an URL it does not change the URL when loading the webpage.
+- [x] When changing tabs, the URL does not change.
 - [x] Change between tabs.
 - [x] When closing a tab, the previous tab does not become active.
 - [x] Close tabs.

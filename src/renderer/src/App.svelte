@@ -10,7 +10,7 @@
 </script>
 
 <div id="topbar">
-  <URLBar />
+  <URLBar url={tabs.find((t) => t.isActive)?.url || ''} />
 </div>
 <div id="sidebar" class="text">
   <NewTab />
