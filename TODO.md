@@ -24,7 +24,6 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 ## Feats
 
-- [ ] Change between tabs.
 - [ ] Add error offline HTML page.
 - [ ] Add preferences page.
 - [ ] Add loading animation to tab when loading a page.
@@ -37,6 +36,9 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 ### Milestones
 
-- [x] Add new tabs.
-- [x] Close tabs.
+> Ordered by latest
+
+- [x] Change between tabs.
 - [x] When closing a tab, the previous tab does not become active.
+- [x] Close tabs.
+- [x] Add new tabs.
