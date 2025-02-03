@@ -21,7 +21,7 @@
     onload={(event): string => ((event.target as HTMLImageElement).style.display = '')}
   />
   <p>{name}</p>
-  <div class="close-icon-div">
-    <IconX size={16} class="close-icon" />
+  <div class="hidden" class:close-icon-div={isMouseOver}>
+    <IconX size={20} class="close-icon" />
   </div>
 </div>
