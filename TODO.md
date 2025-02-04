@@ -2,7 +2,7 @@
 
 > Why Electron?
 
-Mainly because how difficult is to fork Chromium/Firefox and do the things that I want. Electron, eventhough won not be the best solution, the main concept of this browser is to understand what I am doing and how Electron, Svelte, Vite works.
+Mainly because how difficult is to fork Chromium/Firefox and do the things that I want. Electron, eventhough would not be the best solution, the main concept of this browser is to understand what I am doing and how Electron, Svelte, Vite works.
 
 > Why Svelte?
 
@@ -18,13 +18,17 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 ## Bugs
 
-- [ ] Sometimes when the browser is not focused, URL and Tab dissapear.
+- [ ] Sometimes when the browser is not focused (OS goes to sleep), URL and Tab dissapear.
+- [ ] Fix close tab menu item (also shortcut Cmd+W)
 
 ## Feats
 
 - [ ] Add error offline HTML page.
+- [ ] Right click context menu for content.
+- [ ] Right click context menu for sidebar.
 - [ ] Add preferences page.
 - [ ] Add loading animation to tab when loading a page.
+- [ ] Drag and drop tabs.
 
 ## Refactors
 
@@ -32,6 +36,7 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 - [ ] Check where all the events are listened to avoid useless calls (for example: close tab call every tab event).
 - [ ] Remove current tab as it is last children from content view.
 - [ ] Remove main ipc change url event, as we are using the active tab.
+- [ ] Divide main css (yeah, I am a mess).
 
 ### Milestones
 
