@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Navigation from './components/Navigation.svelte';
   import NewTab from './components/NewTab.svelte';
   import Tab from './components/Tab.svelte';
   import URLBar from './components/URLBar.svelte';
@@ -10,6 +11,7 @@
 </script>
 
 <div id="topbar">
+  <Navigation navigation={tabs.find((t) => t.isActive)?.navigation} />
   <URLBar url={tabs.find((t) => t.isActive)?.url || ''} />
 </div>
 <div id="sidebar" class="text">

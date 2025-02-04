@@ -13,6 +13,8 @@ const api = {
   newTab: (): void => ipcRenderer.send('new-tab'),
   changeCurrentTab: (id: string): void => ipcRenderer.send('change-current-tab', id),
   closeTab: (id: string): void => ipcRenderer.send('close-tab', id),
+  goBack: (): void => ipcRenderer.send('go-back'),
+  goForward: (): void => ipcRenderer.send('go-forward'),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

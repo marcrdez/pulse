@@ -7,6 +7,8 @@ interface API {
   newTab(): void;
   changeCurrentTab(id: string): void;
   closeTab(id: string): void;
+  goBack(): void;
+  goForward(): void;
 }
 
 declare global {

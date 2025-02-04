@@ -22,7 +22,7 @@ So, why not doing my own browser? 🤔 Well, I am not going to fork Chromium or 
 
 #### Why Svelte?
 
-Well, pretty knew, well maintained and it is really fast, so why not? I am using it for the interface of the browser, so speed is a must. It does not uses a virtual DOM, I can ensure it is fast.
+Well, pretty known, well maintained and it is really fast, so why not? I am using it for the interface of the browser, so speed is a must. It does not uses a virtual DOM, I can ensure it is fast.
 
 #### Why Vite?
 

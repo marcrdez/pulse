@@ -10,6 +10,7 @@ export class Tab extends EventEmitter {
   url: string;
   contentView: WebContentsView;
   isActive: boolean;
+  navigation: { canGoBack: boolean; canGoForward: boolean };
 
   constructor(mainWindow: BaseWindow, sideBarView: WebContentsView) {
     super();
@@ -22,6 +23,7 @@ export class Tab extends EventEmitter {
     this.url = this.contentView.webContents.getURL();
     this.faviconUrls = [];
     this.isActive = true;
+    this.navigation = { canGoBack: false, canGoForward: false };
 
     const contentView = new WebContentsView({
       webPreferences: {
@@ -50,6 +52,15 @@ export class Tab extends EventEmitter {
     contentView.webContents.on('will-navigate', (event) => {
       sideBarView.webContents.send('will-navigate', event.url);
       this.url = event.url;
+
+      this.emit('tab-changed', this);
+    });
+
+    contentView.webContents.on('did-navigate', () => {
+      this.navigation = {
+        canGoBack: contentView.webContents.navigationHistory.canGoBack(),
+        canGoForward: contentView.webContents.navigationHistory.canGoForward(),
+      };
     });
 
     contentView.webContents.on('page-title-updated', (_, title) => {
@@ -70,6 +81,10 @@ export class Tab extends EventEmitter {
       sideBarView.webContents.send('will-navigate', url);
       this.title = contentView.webContents.getTitle();
       this.url = url;
+      this.navigation = {
+        canGoBack: contentView.webContents.navigationHistory.canGoBack(),
+        canGoForward: contentView.webContents.navigationHistory.canGoForward(),
+      };
 
       this.emit('tab-changed', this);
     });
@@ -113,9 +128,17 @@ export class Tab extends EventEmitter {
     });
 
     this.on('active', () => {
-      this.isActive = true;
+      this.active();
 
       mainWindow.contentView.addChildView(contentView);
+    });
+
+    this.on('go-back', () => {
+      contentView.webContents.navigationHistory.goBack();
+    });
+
+    this.on('go-forward', () => {
+      contentView.webContents.navigationHistory.goForward();
     });
   }
 

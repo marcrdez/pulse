@@ -6,7 +6,10 @@ import { ipcMain } from 'electron/main';
 export interface PrimitiveTabs {
   id: string;
   title: string;
+  faviconUrls: string[];
   url: string;
+  isActive: boolean;
+  navigation?: { canGoBack: boolean; canGoForward: boolean };
 }
 
 export class Browser extends EventEmitter {
@@ -41,6 +44,14 @@ export class Browser extends EventEmitter {
       this._currentTab.background();
       this.updateCurrentTab(tab);
     });
+
+    ipcMain.on('go-back', () => {
+      this.goBack();
+    });
+
+    ipcMain.on('go-forward', () => {
+      this.goForward();
+    });
   }
 
   public addTab(): void {
@@ -64,6 +75,14 @@ export class Browser extends EventEmitter {
     this.sideBarView.webContents.send('tabs-changed', this.tabs);
   }
 
+  public goBack(): void {
+    this._currentTab.emit('go-back');
+  }
+
+  public goForward(): void {
+    this._currentTab.emit('go-forward');
+  }
+
   public openDevTools(): void {
     const webContents = this._currentTab.contentView.webContents;
     if (webContents.isDevToolsOpened()) {
@@ -75,13 +94,24 @@ export class Browser extends EventEmitter {
   }
 
   get tabs(): Array<PrimitiveTabs> {
-    return this._tabs.map((tab) => ({
-      id: tab.id,
-      title: tab.title,
-      url: tab.url,
-      faviconUrls: tab.faviconUrls,
-      isActive: tab.isActive,
-    }));
+    return this._tabs.map((tab): PrimitiveTabs => {
+      const primitives: PrimitiveTabs = {
+        id: tab.id,
+        title: tab.title,
+        url: tab.url,
+        faviconUrls: tab.faviconUrls,
+        isActive: tab.isActive,
+      };
+
+      if (tab.isActive) {
+        primitives.navigation = {
+          canGoBack: tab.navigation.canGoBack,
+          canGoForward: tab.navigation.canGoForward,
+        };
+      }
+
+      return primitives;
+    });
   }
 
   get currentTab(): Tab {

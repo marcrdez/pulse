@@ -167,11 +167,11 @@ code {
   transition: background-color 0.2s;
 }
 
-.active {
-  background-color: rgba(255, 255, 255, 0.2);
+.active-tab {
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
-.tab:hover {
+.tab:hover:not(.active) {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -206,7 +206,33 @@ code {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.close-icon {
+.disabled {
+  color: grey;
+}
+
+.enabled {
+  color: white;
+}
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  margin-right: 15px;
+  gap: 5px;
+  app-region: no-drag;
+}
+
+.icon-div {
+  display: flex;
+  border-radius: 6px;
+  min-height: 25px;
+  min-width: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+.enabled.icon-div:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 720px) {

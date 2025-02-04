@@ -89,6 +89,36 @@ function createMenu(sideBar: WebContentsView, browser: Browser): void {
 
   menu.append(
     new MenuItem({
+      label: 'History',
+      submenu: [
+        {
+          label: 'Go Back',
+          accelerator: 'CmdOrCtrl+[',
+          click: (): void => browser.goBack(),
+        },
+        {
+          label: 'Back',
+          accelerator: 'CmdOrCtrl+Left',
+          visible: false,
+          click: (): void => browser.goBack(),
+        },
+        {
+          label: 'Go Forward',
+          accelerator: 'CmdOrCtrl+]',
+          click: (): void => browser.goForward(),
+        },
+        {
+          label: 'Forward',
+          accelerator: 'CmdOrCtrl+Right',
+          visible: false,
+          click: (): void => browser.goForward(),
+        },
+      ],
+    }),
+  );
+
+  menu.append(
+    new MenuItem({
       label: 'Tabs',
       submenu: [
         { label: 'New Tab', accelerator: 'CmdOrCtrl+T', click: (): void => browser.addTab() },

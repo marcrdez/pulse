@@ -20,6 +20,7 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 - [ ] Sometimes when the browser is not focused (OS goes to sleep), URL and Tab dissapear.
 - [ ] Fix close tab menu item (also shortcut Cmd+W)
+- [ ] Fix menu go back and go forward enablement. (See possible [solution](https://stackoverflow.com/a/47761652))
 
 ## Feats
 
@@ -42,6 +43,7 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 > Ordered by latest
 
+- [x] Go back and go forward buttons and shortcuts.
 - [x] When entering an URL it does not change the URL when loading the webpage.
 - [x] When changing tabs, the URL does not change.
 - [x] Change between tabs.

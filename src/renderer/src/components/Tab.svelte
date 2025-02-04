@@ -18,7 +18,7 @@
 
 <div
   class="tab"
-  class:active={isActive}
+  class:active-tab={isActive}
   onmouseenter={(): boolean => (isMouseOver = true)}
   onmouseleave={(): boolean => (isMouseOver = false)}
   role="button"
