@@ -43,6 +43,7 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 > Ordered by latest
 
+- [x] Open webContent chrome devs tool.
 - [x] Go back and go forward buttons and shortcuts.
 - [x] When entering an URL it does not change the URL when loading the webpage.
 - [x] When changing tabs, the URL does not change.

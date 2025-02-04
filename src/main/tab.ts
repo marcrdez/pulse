@@ -140,6 +140,10 @@ export class Tab extends EventEmitter {
     this.on('go-forward', () => {
       contentView.webContents.navigationHistory.goForward();
     });
+
+    this.on('toggle-dev-tools', () => {
+      contentView.webContents.toggleDevTools();
+    });
   }
 
   public active(): void {

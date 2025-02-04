@@ -65,7 +65,7 @@ function createMenu(sideBar: WebContentsView, browser: Browser): void {
           role: 'toggleDevTools',
           accelerator: process.platform === 'darwin' ? 'F12' : 'F12',
           click: (): void => {
-            sideBar.webContents.toggleDevTools();
+            browser.toggleDevTools();
           },
         },
       ],

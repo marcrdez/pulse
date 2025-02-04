@@ -83,14 +83,8 @@ export class Browser extends EventEmitter {
     this._currentTab.emit('go-forward');
   }
 
-  public openDevTools(): void {
-    const webContents = this._currentTab.contentView.webContents;
-    if (webContents.isDevToolsOpened()) {
-      webContents.closeDevTools();
-    } else {
-      webContents.openDevTools({ mode: 'undocked' });
-      console.log('Open dev tool...');
-    }
+  public toggleDevTools(): void {
+    this._currentTab.emit('toggle-dev-tools');
   }
 
   get tabs(): Array<PrimitiveTabs> {
