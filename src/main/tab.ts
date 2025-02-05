@@ -16,11 +16,6 @@ export class Tab extends EventEmitter {
     super();
     this.id = crypto.randomUUID();
 
-    this.contentView = new WebContentsView();
-    this.contentView.webContents.loadURL('https://www.google.com');
-
-    this.title = this.contentView.webContents.getTitle();
-    this.url = this.contentView.webContents.getURL();
     this.faviconUrls = [];
     this.isActive = true;
     this.navigation = { canGoBack: false, canGoForward: false };
@@ -28,12 +23,16 @@ export class Tab extends EventEmitter {
     const contentView = new WebContentsView({
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
-        sandbox: false,
+        sandbox: true,
+        backgroundThrottling: true,
       },
     });
+    this.title = contentView.webContents.getTitle();
+    this.url = contentView.webContents.getURL();
     contentView.webContents.loadURL('https://www.google.com');
     contentView.setBorderRadius(10);
     mainWindow.contentView.addChildView(contentView);
+    this.contentView = contentView;
 
     const bounds = mainWindow.getBounds();
 

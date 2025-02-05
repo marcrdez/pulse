@@ -122,7 +122,7 @@ export class Browser extends EventEmitter {
       this.deleteTab(tab);
       const nextTab = this._tabs.find(
         (t) =>
-          t.contentView.webContents.id + 1 ===
+          t.contentView.webContents.id ===
           (this.window.contentView.children.at(-1) as WebContentsView).webContents.id,
       );
 

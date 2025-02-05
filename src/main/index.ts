@@ -1,4 +1,4 @@
-import { app, BaseWindow, WebContentsView, BrowserWindow, Menu, MenuItem } from 'electron';
+import { app, BaseWindow, WebContentsView, Menu, MenuItem } from 'electron';
 import { join } from 'path';
 import { electronApp, is } from '@electron-toolkit/utils';
 import { Browser } from './browser';
@@ -50,10 +50,10 @@ function createWindow(): void {
 
   const browser = new Browser(mainWindow, sideBar);
 
-  createMenu(sideBar, browser);
+  createMenu(browser);
 }
 
-function createMenu(sideBar: WebContentsView, browser: Browser): void {
+function createMenu(browser: Browser): void {
   const menu = new Menu();
 
   menu.append(
@@ -62,7 +62,6 @@ function createMenu(sideBar: WebContentsView, browser: Browser): void {
       submenu: [
         {
           label: 'Toggle developer tools',
-          role: 'toggleDevTools',
           accelerator: process.platform === 'darwin' ? 'F12' : 'F12',
           click: (): void => {
             browser.toggleDevTools();
@@ -150,7 +149,7 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BaseWindow.getAllWindows().length === 0) createWindow();
   });
 });
 

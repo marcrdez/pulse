@@ -171,7 +171,7 @@ code {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-.tab:hover:not(.active) {
+.tab:hover:not(.active-tab) {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
