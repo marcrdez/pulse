@@ -25,7 +25,6 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 ## Feats
 
 - [ ] Add error offline HTML page.
-- [ ] Right click context menu for content.
 - [ ] Right click context menu for sidebar.
 - [ ] Add preferences page.
 - [ ] Add loading animation to tab when loading a page.
@@ -43,6 +42,7 @@ Why? Avoiding bugs is the main priority, next is the refactors to avoid the big 
 
 > Ordered by latest
 
+- [x] Right click context menu for content.
 - [x] Open webContent chrome devs tool.
 - [x] Go back and go forward buttons and shortcuts.
 - [x] When entering an URL it does not change the URL when loading the webpage.

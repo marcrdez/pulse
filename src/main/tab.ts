@@ -2,6 +2,7 @@ import { BaseWindow, ipcMain, WebContentsView } from 'electron';
 import { join } from 'path';
 import { SIDEBAR_WIDTH, CONTENT_PADDING, MENUBAR_HEIGHT } from '.';
 import EventEmitter from 'events';
+import { buildChromeContextMenu } from './browser-content-menu';
 
 export class Tab extends EventEmitter {
   id: string;
@@ -47,6 +48,19 @@ export class Tab extends EventEmitter {
     });
 
     this.registerAutoResize(mainWindow, contentView);
+
+    contentView.webContents.on('context-menu', (_, params) => {
+      const menu = buildChromeContextMenu({
+        params,
+        webContents: contentView.webContents,
+        openLink: (url) => {
+          contentView.webContents.loadURL(url);
+          this.emit('tab-changed', this);
+        },
+      });
+
+      menu.popup();
+    });
 
     contentView.webContents.on('will-navigate', (event) => {
       sideBarView.webContents.send('will-navigate', event.url);
