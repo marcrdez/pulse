@@ -1,0 +1,13 @@
+name: CI
+run-name: Checking code for type errors
+on: push
+jobs:
+  typecheck:
+    name: Check code types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install
+      - run: bun typecheck
